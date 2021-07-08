@@ -23,7 +23,7 @@ function LoginForm(props) {
 
         if (valid) {
             props.logIn(credentials)
-                .catch((err) => { props.setMessage(err); });
+                .catch((err) => { console.log("fallito"); props.setMessage(err.error); });
         }
 
     };

@@ -4,9 +4,9 @@
 const db = require('./db');
 const bcrypt = require('bcrypt');
 
-exports.getUser = (username, password) => {
+exports.getCreator = (username, password) => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT id,username,email,hashedPassword FROM User WHERE username=?';
+        const sql = 'SELECT creatorId,username,email,hashedPassword FROM Creator WHERE username=?';
         db.get(sql, [username], (err, row) => {
             if (err) {
                 reject(err);
@@ -14,11 +14,11 @@ exports.getUser = (username, password) => {
                 resolve(false);
             }
             else {
-                const user = { id: row.id, username: row.username, email: row.email };
+                const creator = { creatorId: row.creatorId, username: row.username, email: row.email };
                 // check the hashes with an async call, given that the operation may be CPU-intensive (and we don't want to block the server)
                 bcrypt.compare(password, row.hashedPassword).then(result => {
                     if (result)
-                        resolve(user);
+                        resolve(creator);
                     else
                         resolve(false);
                 });
@@ -27,18 +27,18 @@ exports.getUser = (username, password) => {
     });
 };
 
-exports.getUserById = (id) => {
+exports.getCreatorById = (creatorId) => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT id,username,email FROM User WHERE id = ?';
-        db.get(sql, [id], (err, row) => {
+        const sql = 'SELECT creatorId,username,email FROM Creator WHERE creatorId = ?';
+        db.get(sql, [creatorId], (err, row) => {
             if (err)
                 reject(err);
-            else if (row === undefined)
-                resolve({ error: 'User not found.' });
+            else if (row === undefined) // username does not exist;
+                resolve(false);
             else {
                 // by default, the local strategy looks for "username": not to create confusion in server.js, we can create an object with that property
-                const user = { id: row.id, username: row.username, email: row.email };
-                resolve(user);
+                const creator = { creatorId: row.creatorId, username: row.username, email: row.email };
+                resolve(creator);
             }
         });
     });

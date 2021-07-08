@@ -22,7 +22,7 @@ const SelectBackground = (props) => {
                     <Card.Img src={process.env.PUBLIC_URL + props.meme?.background?.path} />
                     <Card.Body>
                         <Card.Text>
-                            {props.meme?.author}
+                            {props.meme?.creator}
                         </Card.Text>
                         <Card.Text>
                             {props.meme?.isProtected ? <><LockFill id="lock-icon" />Protected</> : <><PeopleFill id="people-icon" />Public</>}

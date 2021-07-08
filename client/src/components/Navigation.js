@@ -21,7 +21,7 @@ const Navigation = (props) => {
                 props.loggedIn ?
                     <>
                         <Button className="ml-sm-auto" variant="outline-light" onClick={props.create} >Create new meme</Button>
-                        <Navbar.Brand className="ml-sm-auto">{props.user && props.user.username}</Navbar.Brand>
+                        <Navbar.Brand className="ml-sm-auto">{props.creator && props.creator.username}</Navbar.Brand>
                         <LogoutButton logOut={props.logOut} />
                     </>
                     :

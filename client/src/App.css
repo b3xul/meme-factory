@@ -19,33 +19,35 @@
 }
 */
 
-.navigation-text{
-  color: white;
-} 
-
+/* -------------------------------------------------------------------------- */
+/*                            Components positions                            */
+/* -------------------------------------------------------------------------- */
 .vheight-100 {
   min-height: 100vh;
 }
 
 .below-nav {
-  margin-top:4rem;
+  padding-top:4rem;
 }
 @media only screen and (min-width: 572.99px) and (max-width: 924.98px) {
   .below-nav{
-      margin-top: 10rem;
+      padding-top: 10rem;
   }
 }
 @media only screen and (min-width: 507.99px) and (max-width: 572.98px) {
   .below-nav{
-      margin-top: 12rem;
+      padding-top: 12rem;
   }
 }
 @media only screen and (max-width: 507.98px) {
   .below-nav{
-      margin-top: 18rem;
+      padding-top: 18rem;
   }
 }
 
+/* -------------------------------------------------------------------------- */
+/*                            Toast customization                           */
+/* -------------------------------------------------------------------------- */
 .toast {
   position: absolute;
   top: 0;
@@ -56,23 +58,12 @@
   color: red;
 }
 
-.card{
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-.card-img{
-  width: 100%;
-  max-width: 250px;
-  height: auto;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.card-title{
-  text-align: center;
-  margin-top: .75rem;
-}
+/* -------------------------------------------------------------------------- */
+/*                             Color customization                            */
+/* -------------------------------------------------------------------------- */
+.navigation-text{
+  color: white;
+} 
 
 #lock-icon{
   fill: var(--warning);
@@ -82,11 +73,51 @@
   fill: var(--success);
 }
 
+/* -------------------------------------------------------------------------- */
+/*                             Meme customization                             */
+/* -------------------------------------------------------------------------- */
 .meme-container {
   position: relative;
+  overflow: auto;
+  /* display:block;
+  margin:auto; */
 }
 
 .meme-image{
-  max-width: 100%;
-  max-height: 648px;
+  height: 648px;
+  /* max-height: 100%; */
 }
+
+.meme-image-card{
+  /* width: 430px; */
+  height: 324px;
+  
+  /* max-height: 324px; 
+  max-width: 100%; */
+  /*max-height: 100%;  */
+}
+
+/* -------------------------------------------------------------------------- */
+/*                            Card customization                            */
+/* -------------------------------------------------------------------------- */
+.card{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.card-title{
+  text-align: center;
+  margin-top: .75rem;
+}
+
+.card-body{
+  padding-top: 0;
+}
+/* .card-img{
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+} */
+

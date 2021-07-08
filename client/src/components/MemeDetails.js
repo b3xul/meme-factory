@@ -12,39 +12,42 @@ const MemeDetails = (props) => {
     return (
         <>
             <Col>
-                <Form spellCheck={false}>
-                    <div className="meme-container below-nav">
-                        <Image className="meme-image" src={process.env.PUBLIC_URL + props.meme?.background?.path} />
-
+                <div className="meme-container">
+                    <Image className="meme-image" src={process.env.PUBLIC_URL + props.meme?.background?.path} />
+                    <Form spellCheck={false}>
                         <Form.Group controlId="sentence-0">
-                            <Form.Control as="textarea" rows={2} cols={15} readOnly style={{
-                                position: "absolute", width: "auto", backgroundColor: "transparent", border: "0", boxShadow: "none", overflow: "hidden", wordWrap: "break-word", resize: "none",
-                                top: "10%", left: "14%", fontFamily: "ui-rounded", fontSize: "200%", color: "white"
+                            <Form.Control as="textarea" readOnly style={{
+                                position: "absolute", backgroundColor: "transparent", border: "0", boxShadow: "none", overflow: "hidden", wordWrap: "break-word", resize: "none",
+                                // top: "10%", left: "14%", fontFamily: "ui-rounded", fontSize: "150%", color: "white"
+                                top: "60px", left: "100px", width: "360px", height: "120px", fontFamily: "ui-rounded", fontSize: "40px", color: "white"
                             }} value={props.meme?.sentences[0]} />
                         </Form.Group>
                         <Form.Group controlId="sentence-1">
-                            <Form.Control as="textarea" rows={1} cols={10} readOnly style={{
-                                position: "absolute", width: "auto", backgroundColor: "transparent", border: "0", boxShadow: "none", overflow: "hidden", resize: "none",
-                                top: "230px", left: "430px", fontFamily: "ui-rounded", fontSize: "40px", color: "white"
+                            <Form.Control as="textarea" readOnly style={{
+                                position: "absolute", backgroundColor: "transparent", border: "0", boxShadow: "none", overflow: "hidden", resize: "none",
+                                // top: "35%", left: "64%", fontFamily: "ui-rounded", fontSize: "150%", color: "white"
+                                top: "230px", left: "430px", width: "220px", height: "60px", fontFamily: "ui-rounded", fontSize: "40px", color: "white"
                             }} value={props.meme?.sentences[1]} />
                         </Form.Group>
                         <Form.Group controlId="sentence-2">
-                            <Form.Control as="textarea" rows={1} cols={20} readOnly style={{
-                                position: "absolute", width: "auto", backgroundColor: "transparent", border: "0", boxShadow: "none", overflow: "hidden", resize: "none",
-                                top: "550px", left: "150px", fontFamily: "ui-rounded", fontSize: "40px", color: "white"
+                            <Form.Control as="textarea" readOnly style={{
+                                position: "absolute", backgroundColor: "transparent", border: "0", boxShadow: "none", overflow: "hidden", resize: "none",
+                                // top: "90%", left: "30%", fontFamily: "ui-rounded", fontSize: "150%", color: "white"
+                                top: "550px", left: "150px", width: "360px", height: "60px", fontFamily: "ui-rounded", fontSize: "40px", color: "white"
                             }} value={props.meme?.sentences[2]} />
                         </Form.Group>
-                    </div>
-                </Form>
+                    </Form>
+                </div>
+
             </Col>
             <Col>
                 <Container fluid className='d-flex flex-column justify-content-around h-100'>
-                    <ListGroup as="ul" variant="flush" className="below-nav">
+                    <ListGroup as="ul" variant="flush" className="">
                         <ListGroup.Item as="li">
                             <h2>Title: {props.meme?.title}</h2>
                         </ListGroup.Item>
                         <ListGroup.Item as="li">
-                            Author: {props.meme?.author}
+                            Creator: {props.meme?.creator}
                         </ListGroup.Item>
                         <ListGroup.Item as="li">
                             Visibility: {props.meme?.isProtected ?
