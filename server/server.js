@@ -8,7 +8,8 @@ const session = require("express-session"); // enable sessions
 const { check, validationResult } = require("express-validator"); // validation middleware
 
 const creatorDAO = require("./creatorDAO"); // module for accessing the creators in the DB
-
+const backgroundImageDAO = require("./backgroundImageDAO"); // module for accessing the background images structures in the DB
+const memeDAO = require("./memeDAO"); // module for accessing the memes in the DB
 
 const errorObject = {
   "badCredentials": { "error": "Wrong username or password" },
@@ -30,7 +31,7 @@ passport.use(new LocalStrategy(
 
         return done(null, creator);  // creator contains creatorId, username, email
       })
-      .catch((err) => { return done(err, null, errorObject["dbError"]); });
+      .catch((err) => { return done(errorObject["dbError"], null); });
   }
 ));
 
@@ -131,10 +132,56 @@ app.get("/api/sessions/current", (req, res) => {
 });
 
 /* -------------------------------------------------------------------------- */
+/*                           BackgroundImages APIs                            */
+/* -------------------------------------------------------------------------- */
+
+// GET /api/backgroundImages
+app.get('/api/backgroundImages',
+  (req, res) => {
+    // get backgroundImages that match optional filter in the query
+    backgroundImageDAO.listBackgroundImages()
+      .then(backgroundImages => { console.log('ok'); res.json(backgroundImages); })
+      .catch((err) => { console.log(err); res.status(500).end(); });
+  });
+
+
+/* -------------------------------------------------------------------------- */
 /*                                  Meme APIs                                 */
 /* -------------------------------------------------------------------------- */
 
+// GET /api/memes
+app.get('/api/memes',
+  isLoggedIn,
+  (req, res) => {
+    console.log('all memes');
+    memeDAO.listMemes()
+      .then(memes => res.json(memes))
+      .catch(() => res.status(500).end());
+  });
 
+// GET /api/memes/public
+app.get('/api/memes/public',
+  (req, res) => {
+    // get memes that match optional filter in the query
+    memeDAO.listPublicMemes()
+      .then(memes => res.json(memes))
+      .catch(() => res.status(500).end());
+  });
+
+// DELETE /api/memes/<memeId>
+app.delete('/api/memes/:memeId',
+  isLoggedIn,
+  [check('memeId').isInt()],
+  async (req, res) => {
+    try {
+      //check creatorId=loggedUser
+
+      await memeDAO.deleteMeme(req.params.id);
+      res.status(200).json({});
+    } catch (err) {
+      res.status(503).json({ error: `Database error during the deletion of meme ${req.params.memeId}` });
+    }
+  });
 /* -------------------------------------------------------------------------- */
 /*                             activate the server                            */
 /* -------------------------------------------------------------------------- */

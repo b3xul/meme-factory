@@ -2,22 +2,27 @@ class Meme {
     /**
      * Constructs a new Meme object
      * @param {Number} memeId memeId
+     * @param {Number} imageId memeId
+     * @param {Number} creatorId memeId
+     * @param {String} creatorUsername username of the creator of the meme
      * @param {String} title meme description
-     * @param {BackgroundImage} background  BackgroundImage object containing path and number of sentences
-     * @param {Array.memeTextArea} textAreas 1,2 or 3 textAreas to place on the background image
-     * @param {String} creator username of the creator of the meme
      * @param {Boolean} isProtected true=protected, false=public
+     * @param {String} fontFamily font-family for all the sentences
+     * @param {Number} fontSize fontSize in px for all the sentences
+     * @param {String} color font color for all the sentences
+     * @param {Array.String} sentences 1, 2, or 3 sentences to fill the predefined textAreas with
      */
-    constructor(memeId, title, creator, isProtected, background, textAreas, memeText, font, fontSize, color) {
+    constructor(memeId, imageId, creatorId, creatorUsername, title, isProtected, fontFamily, fontSize, color, sentences) {
         this.memeId = memeId;
+        this.imageId = imageId;
+        this.creatorId = creatorId;
+        this.creatorUsername = creatorUsername;
         this.title = title;
-        this.background = background;
-        this.textAreas = textAreas;
-        this.font = font;
+        this.isProtected = isProtected;
+        this.fontFamily = fontFamily;
         this.fontSize = fontSize;
         this.color = color;
-        this.creator = creator;
-        this.isProtected = isProtected;
+        this.sentences = sentences;
     }
 
     /**
@@ -26,24 +31,8 @@ class Meme {
      * @return {Meme} the newly created Meme object
      */
     static from(json) {
-        // return new Meme(json.memeId, json.title, json.background, json.sentences, json.creator, json.isProtected);
+        // return new Meme(json.memeId, json.title, json.background, json.sentences, json.creatorUsername, json.isProtected);
     }
 }
 
-class memeTextArea {
-    /**
-     * 
-     * @param {Number} top offset of textarea from div containing background image
-     * @param {Number} left offset of textarea from div containing background image
-     * @param {Number} width size of textarea from div containing background image
-     * @param {Number} height size of textarea from div containing background image
-     */
-    constructor(top, left, width, height) {
-        this.top = top;
-        this.left = left;
-        this.width = width;
-        this.height = height;
-    }
-
-}
 export default Meme;

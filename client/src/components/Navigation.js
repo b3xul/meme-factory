@@ -2,6 +2,8 @@
 import { Navbar, Button } from 'react-bootstrap';
 import { FileRichtext } from 'react-bootstrap-icons';
 
+import { Link } from 'react-router-dom';
+
 // Custom components imports
 import { LoginForm, LogoutButton } from "./Login";
 
@@ -20,7 +22,11 @@ const Navigation = (props) => {
                 </Navbar.Brand> :
                 props.loggedIn ?
                     <>
-                        <Button className="ml-sm-auto" variant="outline-light" onClick={props.create} >Create new meme</Button>
+                        {props.loggedIn &&
+                            <Link to="/create" className="ml-sm-auto">
+                                <Button variant="outline-light" >Create new meme</Button>
+                            </Link>
+                        }
                         <Navbar.Brand className="ml-sm-auto">{props.creator && props.creator.username}</Navbar.Brand>
                         <LogoutButton logOut={props.logOut} />
                     </>

@@ -1,0 +1,153 @@
+/* -------------------------------------------------------------------------- */
+/*                             Creator management                             */
+/* -------------------------------------------------------------------------- */
+# LogIn
+### correct login
+POST http://localhost:3001/api/sessions
+Content-Type: application/json
+
+{"username": "John", "password": "MNM4H3seGTtiETx"}
+
+### wrong username pwd
+POST http://localhost:3001/api/sessions
+Content-Type: application/json
+
+{"username": "John", "password": "MNM4H3"}
+
+### missing credentials
+POST http://localhost:3001/api/sessions
+
+# getUserInfo
+### check whether the creator is logged in or not
+GET http://localhost:3001/api/sessions/current
+
+# logOut
+###logOut
+DELETE http://localhost:3001/api/sessions/current
+
+/* -------------------------------------------------------------------------- */
+/*                     BackgroundImages management                            */
+/* -------------------------------------------------------------------------- */
+### List Memes
+GET http://localhost:3001/api/backgroundImages
+
+
+/* -------------------------------------------------------------------------- */
+/*                              Memes management                              */
+/* -------------------------------------------------------------------------- */
+### List Memes
+GET http://localhost:3001/api/memes
+
+### List Public Memes
+GET http://localhost:3001/api/memes/public
+
+###
+GET http://localhost:3001/api/memes:filter/All
+
+###
+GET http://localhost:3001/api/memes:filter/Today
+
+###
+GET http://localhost:3001/api/memes:filter/Important
+
+###
+GET http://localhost:3001/api/memes:filter/Private
+
+###
+GET http://localhost:3001/api/memes:filter/Next 7 Days
+
+### Invalid
+GET http://localhost:3001/api/memes:filter/zxcvbnm
+
+# Get a Meme
+###
+GET http://localhost:3001/api/memes/5
+
+### Not present
+GET http://localhost:3001/api/memes/99
+
+### Invalid
+GET http://localhost:3001/api/memes/a
+
+### Villain
+GET http://localhost:3001/api/memes/'
+
+# Create a Meme
+###
+POST http://localhost:3001/api/memes
+Content-Type: application/json
+
+{ "description": "fare una torta", "important":true, "private":false, "deadline":"2021-08-06 08:30", "completed":false, "user":1 }
+
+### Wrong parameters
+POST http://localhost:3001/api/memes
+Content-Type: application/json
+
+{ ....  }
+
+# Update a Meme
+### Empty
+PUT http://localhost:3001/api/memes/
+Content-Type: application/json
+
+{"description": "Watch the new lecture", "important":true, "private":false, "deadline":"", "completed":false, "user":1}
+
+###
+PUT http://localhost:3001/api/memes/5
+Content-Type: application/json
+
+{"description": "Watch the new lecture", "important":true, "private":false, "deadline":"", "completed":false, "user":1}
+
+### Wrong parameters
+PUT http://localhost:3001/api/memes
+Content-Type: application/json
+
+{ ....  }
+
+### Not present
+PUT http://localhost:3001/api/memes/99
+Content-Type: application/json
+
+{"description": "Watch the new lecture", "important":true, "private":false, "deadline":"", "completed":false, "user":1}
+
+# Mark a Meme as completed/uncompleted
+### Empty
+PATCH http://localhost:3001/api/memes/
+Content-Type: application/json
+
+{"completed":true}
+
+###
+PATCH http://localhost:3001/api/memes/5
+Content-Type: application/json
+
+{"completed":true}
+
+###
+PATCH http://localhost:3001/api/memes/5
+Content-Type: application/json
+
+{"completed":false}
+
+
+### Wrong parameters
+PATCH http://localhost:3001/api/memes
+Content-Type: application/json
+
+{ ....  }
+
+### Not present
+PATCH http://localhost:3001/api/memes/99
+Content-Type: application/json
+
+{"description": "Watch the new lecture", "important":true, "private":false, "deadline":"", "completed":false, "user":1}
+
+# Delete a Meme
+### Empty
+DELETE  http://localhost:3001/api/memes
+
+###
+DELETE http://localhost:3001/api/memes/11
+
+### Not present
+DELETE http://localhost:3001/api/memes/99
