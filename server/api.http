@@ -6,13 +6,15 @@
 POST http://localhost:3001/api/sessions
 Content-Type: application/json
 
-{"username": "John", "password": "MNM4H3seGTtiETx"}
+{"username": "John",
+ "password": "MNM4H3seGTtiETx"}
 
 ### wrong username pwd
 POST http://localhost:3001/api/sessions
 Content-Type: application/json
 
-{"username": "John", "password": "MNM4H3"}
+{"username": "John",
+ "password": "MNM4H3"}
 
 ### missing credentials
 POST http://localhost:3001/api/sessions
@@ -28,9 +30,8 @@ DELETE http://localhost:3001/api/sessions/current
 /* -------------------------------------------------------------------------- */
 /*                     BackgroundImages management                            */
 /* -------------------------------------------------------------------------- */
-### List Memes
+### List BackgroundImages
 GET http://localhost:3001/api/backgroundImages
-
 
 /* -------------------------------------------------------------------------- */
 /*                              Memes management                              */
@@ -41,113 +42,202 @@ GET http://localhost:3001/api/memes
 ### List Public Memes
 GET http://localhost:3001/api/memes/public
 
-###
-GET http://localhost:3001/api/memes:filter/All
-
-###
-GET http://localhost:3001/api/memes:filter/Today
-
-###
-GET http://localhost:3001/api/memes:filter/Important
-
-###
-GET http://localhost:3001/api/memes:filter/Private
-
-###
-GET http://localhost:3001/api/memes:filter/Next 7 Days
-
-### Invalid
-GET http://localhost:3001/api/memes:filter/zxcvbnm
-
-# Get a Meme
-###
-GET http://localhost:3001/api/memes/5
-
-### Not present
-GET http://localhost:3001/api/memes/99
-
-### Invalid
-GET http://localhost:3001/api/memes/a
-
-### Villain
-GET http://localhost:3001/api/memes/'
-
 # Create a Meme
-###
+### Ok
 POST http://localhost:3001/api/memes
 Content-Type: application/json
 
-{ "description": "fare una torta", "important":true, "private":false, "deadline":"2021-08-06 08:30", "completed":false, "user":1 }
+{"imageId":2,
+"title":"This project",
+"isProtected":true,
+"fontFamily":"Arial",
+"fontSize":40,
+"color":"black",
+"sentences":["Do the bare minimum requirements",
+"Add 300 customized styles to make it \"just right\"",
+null],
+"originalCreatorId":1,
+"originalIsProtected":true}
 
-### Wrong parameters
+### ImageId not existent/not int (foreign key constraint failed)
 POST http://localhost:3001/api/memes
 Content-Type: application/json
 
-{ ....  }
+{"imageId":45,
+"title":"This project",
+"isProtected":true,
+"fontFamily":"Arial",
+"fontSize":40,
+"color":"black",
+"sentences":["Do the bare minimum requirements",
+"Add 300 customized styles to make it \"just right\"",
+null],
+"originalCreatorId":1,
+"originalIsProtected":true}
 
-# Update a Meme
-### Empty
-PUT http://localhost:3001/api/memes/
+### empty/null title 
+POST http://localhost:3001/api/memes
 Content-Type: application/json
 
-{"description": "Watch the new lecture", "important":true, "private":false, "deadline":"", "completed":false, "user":1}
+{"imageId":2,
+"title":"",
+"isProtected":true,
+"fontFamily":"Arial",
+"fontSize":40,
+"color":"black",
+"sentences":["Do the bare minimum requirements",
+"Add 300 customized styles to make it \"just right\"",
+null],
+"originalCreatorId":1,
+"originalIsProtected":true}
 
-###
-PUT http://localhost:3001/api/memes/5
+### wrong type title OK
+POST http://localhost:3001/api/memes
 Content-Type: application/json
 
-{"description": "Watch the new lecture", "important":true, "private":false, "deadline":"", "completed":false, "user":1}
+{"imageId":2,
+"title":34.5,
+"isProtected":"cuisd",
+"fontFamily":"Arial",
+"fontSize":40,
+"color":"black",
+"sentences":["Do the bare minimum requirements",
+"Add 300 customized styles to make it \"just right\"",
+null],
+"originalCreatorId":1,
+"originalIsProtected":true}
 
-### Wrong parameters
-PUT http://localhost:3001/api/memes
+### isProtected not boolean
+POST http://localhost:3001/api/memes
 Content-Type: application/json
 
-{ ....  }
+{"imageId":2,
+"title":34.5,
+"isProtected":"cuisd",
+"fontFamily":"Arial",
+"fontSize":40,
+"color":"black",
+"sentences":["Do the bare minimum requirements",
+"Add 300 customized styles to make it \"just right\"",
+null],
+"originalCreatorId":1,
+"originalIsProtected":true}
 
-### Not present
-PUT http://localhost:3001/api/memes/99
+### not supported fontFamily
+POST http://localhost:3001/api/memes
 Content-Type: application/json
 
-{"description": "Watch the new lecture", "important":true, "private":false, "deadline":"", "completed":false, "user":1}
+{"imageId":2,
+"title":34.5,
+"isProtected":1,
+"fontFamily":"fhdguid",
+"fontSize":40,
+"color":"black",
+"sentences":["Do the bare minimum requirements",
+"Add 300 customized styles to make it \"just right\"",
+null],
+"originalCreatorId":1,
+"originalIsProtected":true}
 
-# Mark a Meme as completed/uncompleted
-### Empty
-PATCH http://localhost:3001/api/memes/
+### not supported fontSize
+POST http://localhost:3001/api/memes
 Content-Type: application/json
 
-{"completed":true}
+{"imageId":2,
+"title":"This project",
+"isProtected":true,
+"fontFamily":"Arial",
+"fontSize":155000,
+"color":"black",
+"sentences":["Do the bare minimum requirements",
+"Add 300 customized styles to make it \"just right\"",
+null],
+"originalCreatorId":1,
+"originalIsProtected":true}
 
-###
-PATCH http://localhost:3001/api/memes/5
+### not supported color
+POST http://localhost:3001/api/memes
 Content-Type: application/json
 
-{"completed":true}
+{"imageId":2,
+"title":"This project",
+"isProtected":true,
+"fontFamily":"Arial",
+"fontSize":40,
+"color":"fdshjkfhsdk",
+"sentences":["Do the bare minimum requirements",
+"Add 300 customized styles to make it \"just right\"",
+null],
+"originalCreatorId":1,
+"originalIsProtected":true}
 
-###
-PATCH http://localhost:3001/api/memes/5
+### wrong type creatorId
+POST http://localhost:3001/api/memes
 Content-Type: application/json
 
-{"completed":false}
+{"imageId":2,
+"title":"This project",
+"isProtected":true,
+"fontFamily":"Arial",
+"fontSize":40,
+"color":"black",
+"sentences":["Do the bare minimum requirements",
+"Add 300 customized styles to make it \"just right\"",
+null],
+"originalCreatorId":"fhduis",
+"originalIsProtected":true}
 
-
-### Wrong parameters
-PATCH http://localhost:3001/api/memes
+### wrong type originalIsProtected
+POST http://localhost:3001/api/memes
 Content-Type: application/json
 
-{ ....  }
+{"imageId":2,
+"title":"This project",
+"isProtected":true,
+"fontFamily":"Arial",
+"fontSize":40,
+"color":"black",
+"sentences":["Do the bare minimum requirements",
+"Add 300 customized styles to make it \"just right\"",
+null],
+"originalCreatorId":1,
+"originalIsProtected":"fjdios"}
 
-### Not present
-PATCH http://localhost:3001/api/memes/99
+### protected meme can't become public
+POST http://localhost:3001/api/memes
 Content-Type: application/json
 
-{"description": "Watch the new lecture", "important":true, "private":false, "deadline":"", "completed":false, "user":1}
+{"imageId":2,
+"title":"This project",
+"isProtected":false,
+"fontFamily":"Arial",
+"fontSize":40,
+"color":"black",
+"sentences":["Do the bare minimum requirements",
+"Add 300 customized styles to make it \"just right\"",
+null],
+"originalCreatorId":2,
+"originalIsProtected":true}
+
+### multiple errors
+POST http://localhost:3001/api/memes
+Content-Type: application/json
+
+{"imageId":2,
+"title":"This project",
+"isProtected":true,
+"fontFamily":"Arial",
+"fontSize":40,
+"color":"black",
+"sentences":["",
+"",
+null],
+"originalCreatorId":1,
+"originalIsProtected":true}
 
 # Delete a Meme
-### Empty
-DELETE  http://localhost:3001/api/memes
-
-###
-DELETE http://localhost:3001/api/memes/11
+### OK
+DELETE http://localhost:3001/api/memes/24
 
 ### Not present
 DELETE http://localhost:3001/api/memes/99

@@ -227,3 +227,4 @@
 
 - username, password (plus any other requested info)
 - username, password (plus any other requested info)
+- b3xul, "This is my s3cur3 pwd!1!%"

@@ -23,7 +23,9 @@ function LoginForm(props) {
 
         if (valid) {
             props.logIn(credentials)
-                .catch((err) => { console.log("fallito"); props.setMessage(err.error); });
+                .catch((err) => { //console.log("fallito");
+                    props.setMessage(err.error);
+                });
         }
 
     };
@@ -51,7 +53,7 @@ function LoginForm(props) {
             <Button variant="outline-light" type="submit">Login</Button>
         </Form>
     );
-}
+};
 
 function LogoutButton(props) {
     return (

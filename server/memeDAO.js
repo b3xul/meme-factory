@@ -16,7 +16,7 @@ exports.listMemes = (user, filter) => {
                 return;
             }
             const memes = rows.map((row) => {
-                return ({ ...row });
+                return ({ ...row, isProtected: Boolean(row.isProtected) });
             });
             resolve(memes);
         });
@@ -37,74 +37,66 @@ exports.listPublicMemes = (user, filter) => {
                 return;
             }
             const memes = rows.map((row) => {
-                return ({ ...row });
+                return ({ ...row, isProtected: Boolean(row.isProtected) });
             });
             resolve(memes);
         });
     });
 };
 
-// get the course identified by {code}
-exports.getMeme = (memeId) => {
-    return new Promise((resolve, reject) => {
-        const sql =
-            `SELECT memeId, imageId, Meme.creatorId, username as creatorUsername, title, isProtected, fontFamily, fontSize, color, sentence1, sentence2, sentence3
-            FROM Meme, Creator
-            WHERE Meme.creatorId=Creator.creatorId and memeId=?;`;
-        db.get(sql, [memeId], (err, row) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-            if (row == undefined) {
-                resolve({ error: 'Meme not found.' });
-            } else {
-                const meme = { ...row };
-                resolve(meme);
-            }
-        });
-    });
-};
+// // get the course identified by {code}
+// exports.getMeme = (memeId) => {
+//     return new Promise((resolve, reject) => {
+//         const sql =
+//             `SELECT memeId, imageId, Meme.creatorId, username as creatorUsername, title, isProtected, fontFamily, fontSize, color, sentence1, sentence2, sentence3
+//             FROM Meme, Creator
+//             WHERE Meme.creatorId=Creator.creatorId and memeId=?;`;
+//         db.get(sql, [memeId], (err, row) => {
+//             if (err) {
+//                 reject(err);
+//                 return;
+//             }
+//             if (row == undefined) {
+//                 resolve({ error: 'Meme not found.' });
+//             } else {
+//                 const meme = { ...row };
+//                 resolve(meme);
+//             }
+//         });
+//     });
+// };
 
 
 // add a new meme
 // the meme id is added automatically by the DB, and it is returned as result
-exports.createMeme = (meme) => {
+exports.createMeme = (meme, creatorId) => {
     return new Promise((resolve, reject) => {
-        const sql = 'INSERT INTO tasks (description, important, private, deadline, completed, user) VALUES(?, ?, ?, ?, ?, ?)';
-        db.run(sql, [meme.description, meme.important, meme.private, meme.deadline, meme.completed, meme.user], function (err) {
+        const sql = 'INSERT INTO Meme (imageId, creatorId, title, isProtected, fontFamily, fontSize, color, sentence1, sentence2, sentence3) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        db.run(sql, [meme.imageId, creatorId, meme.title, meme.isProtected, meme.fontFamily, meme.fontSize, meme.color, meme.sentences[0], meme.sentences[1], meme.sentences[2]], function (err) {
             if (err) {
                 reject(err);
                 return;
             }
-            resolve(exports.getMeme(this.lastID));
-        });
-    });
-};
-
-// update an existing meme
-exports.updateMeme = (user, id, meme) => {
-    return new Promise((resolve, reject) => {
-        const sql = 'UPDATE memes SET description = ?, important = ?, private = ?, deadline = ?, completed = ? WHERE id = ? and user = ?';
-        db.run(sql, [meme.description, meme.important, meme.private, meme.deadline, meme.completed, id, user], function (err) {
-            if (err) {
-                reject(err);
-                return;
-            }
-            resolve(exports.getMeme(id)); // changed from resolve(exports.getMeme(this.lastID) because of error "not found" (wrong lastID)
+            resolve({ ...meme, memeId: this.lastID });
         });
     });
 };
 
 // delete an existing meme
-exports.deleteMeme = (memeId) => {
+exports.deleteMeme = (memeId, creatorId) => {
     return new Promise((resolve, reject) => {
-        const sql = 'DELETE FROM memes WHERE memeId = ?';
-        db.run(sql, [memeId], (err) => {
+        // If creatorId is not the owner of the memeId that was passed in the request, this operation will fail
+        const sql = 'DELETE FROM Meme WHERE memeId = ? and creatorId = ?';
+        db.run(sql, [memeId, creatorId], function (err) {
             if (err) {
                 reject(err);
                 return;
-            } else
+            }
+            console.log(this.changes);
+            if (this.changes === 0) {
+                resolve({ error: 'Couldn\'t delete meme: not found.' });
+            }
+            else
                 resolve(null);
         });
     });

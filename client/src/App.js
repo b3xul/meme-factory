@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Toast from 'react-bootstrap/Toast';
 import Image from 'react-bootstrap/Image';
+import Button from 'react-bootstrap/Button';
 
 // Custom imports
 import Navigation from './components/Navigation';
@@ -27,16 +28,6 @@ import API from './API';
 import './App.css';
 
 function App() {
-
-  return (
-    <Router>
-      <Main />
-    </Router >
-  );
-}
-
-function Main() {
-
   /* -------------------------------------------------------------------------- */
   /*                               AUTHENTICATION                               */
   /* -------------------------------------------------------------------------- */
@@ -51,8 +42,8 @@ function Main() {
       try {
         // here you have the creator info, if already logged in
         const creator = await API.getCreatorInfo();
-        setLoggedIn(true);
         setCreator(creator);
+        setLoggedIn(true);
         setCheckingAuth(false);
       } catch (err) {
         setCheckingAuth(false);
@@ -65,8 +56,10 @@ function Main() {
   const doLogIn = async (credentials) => {
     try {
       const creator = await API.logIn(credentials);
-      setLoggedIn(true);
       setCreator(creator);
+      console.log(creator);
+      setLoggedIn(true);
+      setMessage(`Welcome, ${creator.username}!`);
     }
     catch (err) {
       setMessage(err.error);
@@ -90,25 +83,14 @@ function Main() {
   const [memes, setMemes] = useState([]);
   const [backgroundImages, setBackgroundImages] = useState([]);
   const [loadingImages, setLoadingImages] = useState(true);
-
-  // // constructor(top, left, width, height)
-  // const areas1 = [new MemeTextArea(60, 100, 360, 120), new MemeTextArea(230, 430, 220, 60), new MemeTextArea(550, 150, 360, 60)];
-  // const areas2 = [new MemeTextArea(60, 100, 360, 120), new MemeTextArea(230, 430, 220, 60), new MemeTextArea(550, 150, 360, 60)];
-
-  // //constructor(imageId, path, textAreas)
-  // const back1 = new BackgroundImage(0, "/background_images/Is-This-A-Pigeon.jpg", areas1);
-  // const back2 = new BackgroundImage(1, "/background_images/Drake-Hotline-Bling.jpg", areas2);
-
-  // // constructor(memeId, title, creator, isProtected, background, sentences, font, fontSize, color)
-  // const meme = new Meme(0, "Meme title", "AngiolinoXx", false, back1, ["programmer", "if statement", "is this AI?"], "Impact", 40, "white");
-  // const meme2 = new Meme(1, "Meme title", "AngiolinoXx", true, back2, ["fare un progetto easy", "creare il nuovo facebook"], "Impact", 40, "black");
+  const [memeIdToDelete, setMemeIdToDelete] = useState(-1);
 
   useEffect(() => {
 
     API.loadBackgroundImages()
       .then(backgroundImages => {
         setBackgroundImages(backgroundImages);
-        console.log(backgroundImages);
+        // console.log(backgroundImages);
         setLoadingImages(false);
       })
       .catch(err => setMessage(err.error));
@@ -117,90 +99,178 @@ function Main() {
 
   useEffect(() => {
     // if (dirty) {
-    if (loggedIn) {
+    if (!checkingAuth && loggedIn) {
       API.loadAllMemes()
         .then(memes => {
           setMemes(memes);
+          console.log(memes);
           setDirty(false);
-
         })
         .catch(err => setMessage(err.error));
     }
-    else {
+    else if (!checkingAuth && !loggedIn) {
       API.loadPublicMemes()
         .then(memes => {
-          console.log(memes);
           setMemes(memes);
+          console.log(memes);
           setDirty(false);
         })
         .catch(err => setMessage(err.error));
     }
     // }
-  }, [dirty, loggedIn]);
+  }, [dirty, loggedIn, checkingAuth]);
 
-  /* ERROR HANDLING */
-  // useeffect che mostra Toast con errore quando message varia;
+  /* -------------------------------------------------------------------------- */
+  /*                               MEME FUNCTIONS                               */
+  /* -------------------------------------------------------------------------- */
+
+  const addMeme = (meme, originalCreatorId, originalIsProtected) => {
+    // exam.status = 'added';
+    // setExams(oldExams => [...oldExams, exam]);
+
+    // setUpdatedId(task.id);
+    // setTaskList((oldTaskList) => [...oldTaskList, task]); // local update
+    // API.addNewTask(task).then((err) => { setUpdatedId(-1); setDirty(true); });  // in case of error rehydrate
+    const { memeId, ...lighterMeme } = meme;  // avoid sending memeId=-1 since it is not used by the server
+    console.log(lighterMeme);
+    API.addMeme(lighterMeme, originalCreatorId, originalIsProtected)
+      .then((addedMeme) => {
+        console.log(addedMeme);
+        setMessage("New meme created!");
+        setDirty(true);
+      })
+      .catch(err => {
+        setMessage(err.error);
+        setDirty(true);
+      });
+  };
+
+  // // add or update a task into the list
+  // const handleSaveOrUpdate = (task) => {
+
+  //   // if the task has an id it is an update
+  //   if (task.id) {
+  //     API.updateTask(task)
+  //       .then(() => setDirty(true))
+  //       .catch(e => handleErrors(e));
+
+  //     // otherwise it is a new task to add
+  //   } else {
+  //     API.addTask(task)
+  //       .then(() => setDirty(true))
+  //       .catch(e => handleErrors(e));
+  //   }
+  //   setSelectedTask(MODAL.CLOSED);
+  // };
+
+  const deleteMeme = (memeId) => {
+    // exam.status = 'added';
+    // setExams(oldExams => [...oldExams, exam]);
+
+    // setUpdatedId(task.id);
+    // setTaskList((oldTaskList) => [...oldTaskList, task]); // local update
+    // API.addNewTask(task).then((err) => { setUpdatedId(-1); setDirty(true); });  // in case of error rehydrate
+
+    API.deleteMeme(memeId)
+      .then(() => {
+        setMessage("Meme deleted!");
+        setDirty(true);
+      })
+      .catch(err => {
+        setMessage(err.error);
+        setDirty(true);
+      });
+  };
 
   return (
-    <Container fluid>
-      <Row>
-        <Navigation logIn={doLogIn} setMessage={setMessage} logOut={doLogOut} loggedIn={loggedIn} creator={creator} checkingAuth={checkingAuth} />
-      </Row>
-      <Switch>
-        {/* -------------------------------------------------------------------------- 
+    <Router>
+      <Container fluid>
+        <Row>
+          <Navigation logIn={doLogIn} setMessage={setMessage} logOut={doLogOut} loggedIn={loggedIn} creator={creator} checkingAuth={checkingAuth} />
+        </Row>
+        <Switch>
+          {/* -------------------------------------------------------------------------- 
                           Protected routes: /create, /edit                             
            --------------------------------------------------------------------------  */}
-        < Route path="/create">
-          {loggedIn ?
-            <>
-              <div id="create-title" className="below-nav">Select a background image</div>
-              <Row>
-                {backgroundImages.map(backgroundImage => {
-                  return (
-                    <Col xs={12} sm={6} md={4} key={backgroundImage.imageId}><BackgroundCard backgroundImage={backgroundImage} loggedUsername={creator?.username}></BackgroundCard></Col>
-                  );
-                })}
+          <Route path="/create">
+            {checkingAuth ?
+              <Row className="below-nav">
+                <Col>Checking authentication...🐻</Col>
               </Row>
-            </> :
-            <Redirect to="/" />
-          }
-        </Route>
-        <Route path="/edit">
-          {loggedIn ?
-            <Row className="below-nav">
-              <MemeEdit></MemeEdit>
-            </Row> :
-            <Redirect to="/" />
-          }
-        </Route>
-
-        {/* -------------------------------------------------------------------------- 
-                            Public routes: /, /meme/:memeId, /nonExistingRoute                 
-            --------------------------------------------------------------------------  */}
-        <Route path={["/meme/:memeId"]}>
-          <Row className="below-nav">
-            {(dirty || loadingImages) ? <Row>Loading...🐻</Row> :
-              <MemeDetails
-                memes={memes} backgroundImages={backgroundImages} loggedIn={loggedIn}>
-              </MemeDetails>
-            }
-          </Row>
-        </Route>
-        <Route exact path="/">
-          <Row className="below-nav">
-            {(dirty || loadingImages) ? <Row>Loading...🐻</Row> :
+              :
               <>
-                {memes.map(meme => {
-                  console.log(meme);
-                  return (
-                    <Col xs={12} sm={6} md={4} key={meme.memeId}>
-                      <MemeCard meme={meme} backgroundImage={backgroundImages.find(backgroundImage => backgroundImage.imageId === meme.imageId)} loggedIn={loggedIn}></MemeCard>
-                    </Col>
-                  );
-                })}
+                {loggedIn ?
+                  <>
+                    <Row id="create-title" className="below-nav">Select a background image</Row>
+                    <Row>
+                      {backgroundImages.map(backgroundImage => {
+                        return (
+                          <Col xs={12} sm={6} md={4} key={backgroundImage.imageId}><BackgroundCard backgroundImage={backgroundImage} loggedCreator={creator}></BackgroundCard></Col>
+                        );
+                      })}
+                    </Row>
+                  </> :
+                  <Redirect to="/" />
+                }
               </>
             }
-            {/* <Col xs={12} sm={6} md={4}><MemeCard meme={meme} loggedIn={loggedIn}></MemeCard></Col>
+          </Route>
+          <Route path="/edit">
+            {checkingAuth ?
+              <Row className="below-nav">
+                <Col>Checking authentication...🐻</Col>
+              </Row>
+              :
+              <>
+                {loggedIn ?
+                  <>
+                    {!dirty ?
+                      <Row className="below-nav">
+                        <MemeEdit setMessage={setMessage} addMeme={addMeme}></MemeEdit>
+                      </Row> :
+                      <Col>Loading...🐻</Col>
+                    }
+                  </>
+                  :
+                  <Redirect to="/" />
+                }
+              </>
+            }
+          </Route>
+
+          {/* -------------------------------------------------------------------------- 
+                            Public routes: /, /meme/:memeId, /nonExistingRoute                 
+            --------------------------------------------------------------------------  */}
+          <Route path={["/meme/:memeId"]}>
+            <Row className="below-nav">
+              {/* {checkingAuth ?
+                <Col>Checking authentication...🐻</Col>
+                :
+                <> */}
+              {(dirty || loadingImages) ?
+                <Col>Loading...🐻</Col> :
+                <MemeDetails
+                  memes={memes} backgroundImages={backgroundImages} loggedIn={loggedIn} creator={creator} setMessage={setMessage} setMemeIdToDelete={setMemeIdToDelete} />
+              }
+              {/* </>
+              } */}
+            </Row>
+          </Route>
+          <Route exact path="/">
+            <Row className="below-nav">
+              {(dirty || loadingImages) ? <Col>Loading...🐻</Col> :
+                <>
+                  {memes.map(meme => {
+                    // console.log(meme);
+                    return (
+                      <Col xs={12} sm={6} md={4} key={meme.memeId}>
+                        <MemeCard meme={meme} backgroundImage={backgroundImages.find(backgroundImage => backgroundImage.imageId === meme.imageId)} loggedIn={loggedIn} creator={creator} setMessage={setMessage} setMemeIdToDelete={setMemeIdToDelete} />
+                      </Col>
+                    );
+                  })}
+                </>
+              }
+              {/* <Col xs={12} sm={6} md={4}><MemeCard meme={meme} loggedIn={loggedIn}></MemeCard></Col>
               <Col xs={12} sm={6} md={4}><MemeCard meme={meme2} loggedIn={loggedIn}></MemeCard></Col>
               <Col xs={12} sm={6} md={4}><MemeCard meme={meme} loggedIn={loggedIn}></MemeCard></Col>
               <Col xs={12} sm={6} md={4}><MemeCard meme={meme} loggedIn={loggedIn}></MemeCard></Col>
@@ -213,24 +283,35 @@ function Main() {
               <Col xs={12} sm={6} md={4}><MemeCard meme={meme} loggedIn={loggedIn}></MemeCard></Col>
               <Col xs={12} sm={6} md={4}><MemeCard meme={meme} loggedIn={loggedIn}></MemeCard></Col>
               <Col xs={12} sm={6} md={4}><MemeCard meme={meme} loggedIn={loggedIn}></MemeCard></Col> */}
-          </Row>
-        </Route>
-        <Route>
-          <Row className="below-nav">
-            <Col>
-              <Image src={process.env.PUBLIC_URL + "JohnTravolta404.jpg"} />
-            </Col>
-            <Col className="d-flex flex-column justify-content-center">
-              Page not found!
-            </Col>
-          </Row>
-        </Route>
-      </Switch >
-      {/* <MemeEdit2 meme={meme}></MemeEdit2> */}
-      <Toast className="below-nav" show={message !== ""} onClose={() => setMessage('')} >
-        <Toast.Header id="toast-header">{message}</Toast.Header>
-      </Toast>
-    </Container >
+            </Row>
+          </Route>
+          <Route>
+            <Row className="below-nav">
+              <Col>
+                <Image src={process.env.PUBLIC_URL + "JohnTravolta404.jpg"} />
+              </Col>
+              <Col className="d-flex flex-column justify-content-center">
+                Page not found!
+              </Col>
+            </Row>
+          </Route>
+        </Switch >
+
+        <Toast className="below-nav" show={message !== ""} onClose={() => setMessage('')} >
+          <Toast.Header className={(message.startsWith("Welcome") || message === "New meme created!" || message === "Meme deleted!") ? "toast-header-success" : "toast-header-danger"}>{message}
+          </Toast.Header>
+          {message.startsWith("Do you really want to delete") ?
+            <Toast.Body>
+              <Button variant="danger" block onClick={() => deleteMeme(memeIdToDelete)}>Delete meme</Button>
+            </Toast.Body>
+            :
+            <></>
+          }
+        </Toast>
+
+      </Container >
+    </Router >
   );
 }
+
 export default App;

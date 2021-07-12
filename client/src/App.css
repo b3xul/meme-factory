@@ -1,3 +1,8 @@
+/* @font-face {
+  font-family: "Aguafina Script";
+  src: url("https://fonts.googleapis.com/css?family=Aguafina Script");
+} */
+
 /* .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -49,16 +54,20 @@
 /*                            Toast customization                           */
 /* -------------------------------------------------------------------------- */
 .toast {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
 }
 
-#toast-header{
-  color: red;
+.toast-header-danger{
+  color: var(--danger);
   text-align: center;
 }
 
+.toast-header-success{
+  color: var(--success);
+  text-align: center;
+}
 /* -------------------------------------------------------------------------- */
 /*                             Color customization                            */
 /* -------------------------------------------------------------------------- */

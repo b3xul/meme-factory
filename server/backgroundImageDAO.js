@@ -11,14 +11,14 @@ exports.listBackgroundImages = () => {
             FROM BackgroundImage`;
         db.all(sql, (err, rows) => {
             if (err) {
-                console.log(err);
+                //console.log(err);
                 reject(JSON.stringify(err));
                 return;
             }
 
-            console.log("db ok");
+            //console.log("db ok");
             const backgroundImages = rows.map((row) => {
-                console.log(row);
+                //console.log(row);
                 return ({ ...row });
             });
 

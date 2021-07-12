@@ -18,36 +18,20 @@ const Navigation = (props) => {
             {/* className="my-2 my-lg-0 mx-auto d-none d-sm-block" action="#" role="LogIn" */}
             {props.checkingAuth ?
                 <Navbar.Brand className="ml-sm-auto">
-                    checking authentication...
+                    checking authentication...🐻
                 </Navbar.Brand> :
                 props.loggedIn ?
                     <>
-                        {props.loggedIn &&
-                            <Link to="/create" className="ml-sm-auto">
-                                <Button variant="outline-light" >Create new meme</Button>
-                            </Link>
-                        }
-                        <Navbar.Brand className="ml-sm-auto">{props.creator && props.creator.username}</Navbar.Brand>
+                        <Link to="/create" className="ml-sm-auto">
+                            <Button variant="outline-light">Create new meme</Button>
+                        </Link>
+                        <Navbar.Brand className="ml-sm-auto">{props.creator.username}</Navbar.Brand>
+                        {/* props.creator.username should always be available since it is set before setting props.loggedIn inside checkAuth or doLogIn functions */}
                         <LogoutButton logOut={props.logOut} />
                     </>
                     :
                     <LoginForm logIn={props.logIn} setMessage={props.setMessage} />
             }
-
-            {/*  <Form inline aria-label="username /email">
-                <Form.Control className="mr-sm-2" type="search" placeholder="Search" aria-label="Search query" />
-            </Form>
-
-            <Form inline aria-label="username/email">
-                <Form.Control className="mr-sm-2" type="search" placeholder="Search" aria-label="Search query" />
-            </Form>
-            <Nav className="ml-md-auto">
-                <Nav.Item>
-                    <Nav.Link href="#">
-                        <PersonCircle size="30" />
-                    </Nav.Link>
-                </Nav.Item >
-            </Nav >  */}
         </Navbar >
     );
 };
