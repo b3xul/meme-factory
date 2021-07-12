@@ -1,12 +1,11 @@
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import Image from 'react-bootstrap/Image';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import { PeopleFill, LockFill } from 'react-bootstrap-icons';
 
-import { Link, Redirect, useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 
 import CopyAndDeleteButtons from './CopyAndDeleteButtons';
 
@@ -21,7 +20,9 @@ const MemeDetails = (props) => {
         return meme.memeId === urlMemeId;
     });
 
-    const { memeId, imageId, creatorId, creatorUsername, title, isProtected, fontFamily, fontSize, color, sentences } = meme || {};
+    //memeId not needed
+    const { imageId, creatorId, creatorUsername, title, isProtected, fontFamily, fontSize, color, sentences } = meme || {};
+
     const originalCreator = { creatorId, creatorUsername };
     //console.log(originalCreator);
     //console.log(props.memes);
@@ -39,7 +40,7 @@ const MemeDetails = (props) => {
                         <div className="meme-container">
                             <Image className="meme-image" src={process.env.PUBLIC_URL + backgroundImage?.path} />
                             <Form spellCheck={false}>
-                                CopyAndDeleteButtons             {backgroundImage.textAreas.map((textArea, index) => {
+                                {backgroundImage.textAreas.map((textArea, index) => {
                                     if (index < backgroundImage.numberOfAreas) {
                                         return (
                                             <Form.Group key={`sentence-${index}`} controlId={`sentence-${index}`} >

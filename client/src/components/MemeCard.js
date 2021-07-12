@@ -1,7 +1,4 @@
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import Image from 'react-bootstrap/Image';
 import Form from 'react-bootstrap/Form';
 import { PeopleFill, LockFill } from 'react-bootstrap-icons';
@@ -14,7 +11,9 @@ import CopyAndDeleteButtons from './CopyAndDeleteButtons';
 
 const MemeCard = (props) => {
     // const [highlightedCard, setHighlightedCard] = useState(false);
-    const { memeId, imageId, creatorId, creatorUsername, title, isProtected, fontFamily, fontSize, color, sentences } = props.meme || {};
+
+    //imageId not needed
+    const { memeId, creatorId, creatorUsername, title, isProtected, fontFamily, fontSize, color, sentences } = props.meme || {};
     const originalCreator = { creatorId, creatorUsername };
 
     return (

@@ -4,9 +4,11 @@ import { useState } from 'react';
 // React bootstrap imports
 import { Form, Button } from 'react-bootstrap';
 
+import isStrongPassword from 'validator/lib/isStrongPassword';
+
 function LoginForm(props) {
-    const [username, setUsername] = useState('John');
-    const [password, setPassword] = useState('MNM4H3seGTtiETx');
+    const [username, setUsername] = useState('b3xul');
+    const [password, setPassword] = useState('This is my s3cur3 pwd!1!%');
     // const [show, setShow] = useState(false);
 
     const handleSubmit = (event) => {
@@ -14,14 +16,11 @@ function LoginForm(props) {
         props.setMessage('');
         const credentials = { username, password };
 
-        // basic validation: TO-DO IMPROVE!!!
-        let valid = true;
-        if (username === '' || password === '' || password.length < 6) {
-            valid = false;
-            props.setMessage('Username cannot be empty and password must be at least six character long.');
+        const valid = isStrongPassword(password);
+        if (!valid) {
+            props.setMessage('Password must have a min length of 8 characters, with at least 1 lowercase, 1 uppercase, 1 number, 1 symbol!');
         }
-
-        if (valid) {
+        else {
             props.logIn(credentials)
                 .catch((err) => { //console.log("fallito");
                     props.setMessage(err.error);

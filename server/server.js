@@ -18,14 +18,14 @@ const COLORS = ["black", "white", "red", "green", "blue", "yellow", "brown"];
 const errorObject = {
   "badCredentials": { "error": "Wrong username or password" },
   "dbError": { "error": "There was a problem with our database. Please try again." },
-  "notAuthenticated": { "error": "Only authenticated users can create, copy and delete memes!" }
+  "notAuthenticated": { "error": "Only authenticated users can see create, copy, delete and see protected memes!" }
 };
 
 const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
   // Format express-validate errors as strings
   // return `${location}[${param}]: ${msg}. ${value}, ${nestedErrors}`;
   if (param === "_error")
-    return `At least one text area must be filled and sentence length can't exceed 100 characters!`;
+    return `At least one text area must be filled and sentence length can't exceed 300 characters!`;
   return `${param}: ${msg}`;
 };
 
@@ -184,7 +184,7 @@ app.post('/api/memes',
   isLoggedIn,
   [
     check('title').trim().notEmpty(),
-    check('title').isLength({ min: 1, max: 100 }),
+    check('title').isLength({ min: 1, max: 300 }),
     check('isProtected').isBoolean(),
     check('fontFamily').isIn(FONTS),
     check('fontSize').isIn(SIZES),
@@ -195,9 +195,9 @@ app.post('/api/memes',
       [check('sentences[0]').trim().notEmpty(),
       check('sentences[1]').trim().notEmpty(),
       check('sentences[2]').trim().notEmpty()]),
-    check('sentences[0]').isLength({ min: 0, max: 100 }),
-    check('sentences[1]').isLength({ min: 0, max: 100 }),
-    check('sentences[2]').isLength({ min: 0, max: 100 }),
+    check('sentences[0]').isLength({ min: 0, max: 300 }),
+    check('sentences[1]').isLength({ min: 0, max: 300 }),
+    check('sentences[2]').isLength({ min: 0, max: 300 }),
     check('originalCreatorId').custom((value, { req, loc, path }) => {
       //console.log(value);
       //console.log(req.body.originalCreatorId);
@@ -232,7 +232,7 @@ app.post('/api/memes',
       const result = await memeDAO.createMeme(meme, req.user.creatorId);
       res.json(result);
     } catch (err) {
-      res.status(503).json({ error: `Database error during the creation of new meme: ${err}.` });
+      res.status(503).json({ error: `Database error during the creation of new meme.` }); // avoid showing the exact db error to the malicious user
     }
   });
 

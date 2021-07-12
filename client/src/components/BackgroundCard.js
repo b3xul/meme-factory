@@ -7,11 +7,12 @@ const BackgroundCard = (props) => {
 
     return (
         <>
-            <Link to={{
-                pathname: "/edit",
-                state: { backgroundImage: props.backgroundImage, originalCreator: props.loggedCreator, loggedCreator: props.loggedCreator }
-            }}>
-                <Card>
+
+            <Card>
+                <Link className="clickable-section" to={{
+                    pathname: "/edit",
+                    state: { backgroundImage: props.backgroundImage, originalCreator: props.loggedCreator, loggedCreator: props.loggedCreator }
+                }}>
                     <Card.Body>
                         <div className="meme-container">
                             <Image className="meme-image-card" src={process.env.PUBLIC_URL + props.backgroundImage?.path} />
@@ -39,8 +40,9 @@ const BackgroundCard = (props) => {
                         </div>
 
                     </Card.Body>
-                </Card>
-            </Link>
+                </Link>
+            </Card>
+
         </>
     );
 };

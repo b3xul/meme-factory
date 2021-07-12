@@ -7,7 +7,7 @@ POST http://localhost:3001/api/sessions
 Content-Type: application/json
 
 {"username": "John",
- "password": "MNM4H3seGTtiETx"}
+ "password": "867AWkAVpmshDFj&"}
 
 ### wrong username pwd
 POST http://localhost:3001/api/sessions
@@ -233,7 +233,11 @@ Content-Type: application/json
 "",
 null],
 "originalCreatorId":1,
-"originalIsProtected":true}
+"originalIsProtected":"fdsjkl"}
+
+### multiple errors
+POST http://localhost:3001/api/memes
+Content-Type: application/json
 
 # Delete a Meme
 ### OK

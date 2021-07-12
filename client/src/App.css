@@ -1,52 +1,23 @@
-/* @font-face {
-  font-family: "Aguafina Script";
-  src: url("https://fonts.googleapis.com/css?family=Aguafina Script");
-} */
-
-/* .App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-*/
-
 /* -------------------------------------------------------------------------- */
 /*                            Components positions                            */
 /* -------------------------------------------------------------------------- */
-/* .vheight-100 {
-  min-height: 100vh;
-} */
 
 .below-nav {
-  padding-top:4rem;
+  margin-top:4rem;
 }
 @media only screen and (min-width: 572.99px) and (max-width: 924.98px) {
   .below-nav{
-      padding-top: 10rem;
+    margin-top: 10rem;
   }
 }
 @media only screen and (min-width: 507.99px) and (max-width: 572.98px) {
   .below-nav{
-      padding-top: 12rem;
+    margin-top: 12rem;
   }
 }
 @media only screen and (max-width: 507.98px) {
   .below-nav{
-      padding-top: 18rem;
+    margin-top: 18rem;
   }
 }
 
@@ -93,7 +64,6 @@
 .meme-image-card{
   /* width: 430px; */
   height: 324px;
-  
   /* max-height: 324px; 
   max-width: 100%; */
   /*max-height: 100%;  */

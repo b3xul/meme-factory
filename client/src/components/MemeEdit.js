@@ -7,7 +7,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 // import { PeopleFill, LockFill } from 'react-bootstrap-icons';
 
-import { useLocation, Link, Redirect } from 'react-router-dom';
+import { useLocation, Redirect } from 'react-router-dom';
 import { useState } from 'react';
 
 import Meme from './../models/Meme';
@@ -54,7 +54,7 @@ const MemeEdit = (props) => {
             const list = oldList.map((sentence, index) => {
                 //console.log(index);
                 if (index === i && sentence != null) {
-                    if (ev.target.value.length < sentence.length || sentence.length < 100) // max length of each sentence will be 100 characters 
+                    if (ev.target.value.length < sentence.length || sentence.length < 300) // max length of each sentence will be 300 characters 
                         return ev.target.value;
                     else
                         return sentence;
@@ -70,7 +70,7 @@ const MemeEdit = (props) => {
     };
     const updateTitle = (ev) => {
         setTitle(oldTitle => {
-            if (ev.target.value.length < oldTitle.length || oldTitle.length < 100) // max length of each sentence will be 100 characters 
+            if (ev.target.value.length < oldTitle.length || oldTitle.length < 300) // max length of each sentence will be 300 characters 
                 return ev.target.value;
             else
                 return oldTitle;
@@ -79,8 +79,8 @@ const MemeEdit = (props) => {
     };
 
     const handleSubmit = (event) => {
-        // event.preventDefault();
-        // event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
 
         props.setMessage("");
 
@@ -101,9 +101,9 @@ const MemeEdit = (props) => {
             props.setMessage("Title can't be empty");
             return;
         }
-        if (!isLength(trimmedTitle, { min: 1, max: 100 })) {  //redundant title length check
+        if (!isLength(trimmedTitle, { min: 1, max: 300 })) {  //redundant title length check
             valid = false;
-            props.setMessage("Title length can't exceed 100 characters!");
+            props.setMessage("Title length can't exceed 300 characters!");
             return;
         }
         if (isEmpty(trimmedSentences[0]) && isEmpty(trimmedSentences[1]) && isEmpty(trimmedSentences[2])) {
@@ -112,9 +112,9 @@ const MemeEdit = (props) => {
             return;
         }
         for (let i = 0; i < 3; i++) {
-            if ((trimmedSentences[i] !== null && !isLength(trimmedSentences[i], { min: 0, max: 100 }))) {  //redundant title length check
+            if ((trimmedSentences[i] !== null && !isLength(trimmedSentences[i], { min: 0, max: 300 }))) {  //redundant title length check
                 valid = false;
-                props.setMessage("Sentence length can't exceed 100 characters!");
+                props.setMessage("Sentence length can't exceed 300 characters!");
                 return;
             }
         }

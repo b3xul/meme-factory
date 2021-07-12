@@ -3,6 +3,7 @@ class BackgroundImage {
      * Constructs a new v object
      * @param {Number} imageId background image Id
      * @param {String} path path of the background image
+     * @param {Number} numberOfAreas number of areas available in the image
      * @param {Array.memeTextArea} textAreas 1, 2 or 3 textAreas on the background image to be filled
      */
     constructor(imageId, path, numberOfAreas, textAreas) {
@@ -12,14 +13,6 @@ class BackgroundImage {
         this.textAreas = textAreas;
     }
 
-    /**
-     * Construct an BackgroundImage from a plain object
-     * @param {{}} json 
-     * @return {BackgroundImage} the newly created BackgroundImage object
-     */
-    static from(json) {
-        return new BackgroundImage(json.imageId, json.path, json.numberOfAreas, json.textAreas);
-    }
 }
 
 class MemeTextArea {

@@ -25,14 +25,6 @@ class Meme {
         this.sentences = sentences;
     }
 
-    /**
-     * Construct an Meme from a plain object
-     * @param {{}} json 
-     * @return {Meme} the newly created Meme object
-     */
-    static from(json) {
-        // return new Meme(json.memeId, json.title, json.background, json.sentences, json.creatorUsername, json.isProtected);
-    }
 }
 
 export default Meme;
