@@ -81,7 +81,6 @@ function App() {
     API.loadBackgroundImages()
       .then(backgroundImages => {
         setBackgroundImages(backgroundImages);
-        // console.log(backgroundImages);
         setLoadingImages(false);
       })
       .catch(err => setMessage(err.error));
@@ -93,7 +92,6 @@ function App() {
       API.loadAllMemes()
         .then(memes => {
           setMemes(memes);
-          console.log(memes);
           setDirty(false);
         })
         .catch(err => setMessage(err.error));
@@ -102,7 +100,6 @@ function App() {
       API.loadPublicMemes()
         .then(memes => {
           setMemes(memes);
-          console.log(memes);
           setDirty(false);
         })
         .catch(err => setMessage(err.error));
@@ -217,7 +214,6 @@ function App() {
               {(dirty || loadingImages) ? <Col>Loading...🐻</Col> :
                 <>
                   {memes.map(meme => {
-                    // console.log(meme);
                     return (
                       <Col xs={12} sm={6} md={4} key={meme.memeId}>
                         <MemeCard meme={meme} backgroundImage={backgroundImages.find(backgroundImage => backgroundImage.imageId === meme.imageId)} loggedIn={loggedIn} creator={creator} setMessage={setMessage} setMemeIdToDelete={setMemeIdToDelete} />

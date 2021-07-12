@@ -1,3 +1,7 @@
+// React imports
+import { Redirect, useParams } from "react-router-dom";
+
+// React-Bootstrap imports
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
@@ -5,18 +9,13 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import { PeopleFill, LockFill } from 'react-bootstrap-icons';
 
-import { Redirect, useParams } from "react-router-dom";
-
+// Custom Components imports
 import CopyAndDeleteButtons from './CopyAndDeleteButtons';
 
 const MemeDetails = (props) => {
-    //console.log(props);
     const urlParam = useParams();
     const urlMemeId = Number(urlParam.memeId);
-    //console.log(urlParam);
-    //console.log(urlMemeId);
     const meme = props.memes.find(meme => {
-        //console.log(meme); //console.log(meme.memeId); //console.log(meme.memeId === urlMemeId);
         return meme.memeId === urlMemeId;
     });
 
@@ -24,12 +23,7 @@ const MemeDetails = (props) => {
     const { imageId, creatorId, creatorUsername, title, isProtected, fontFamily, fontSize, color, sentences } = meme || {};
 
     const originalCreator = { creatorId, creatorUsername };
-    //console.log(originalCreator);
-    //console.log(props.memes);
-    //console.log(meme);
     const backgroundImage = props.backgroundImages.find(image => image.imageId === imageId);
-    //console.log(backgroundImage);
-    console.log(`memeDetails: ${props.memes}`);
     return (
         <>
             {/* Only loggedIn users can see protected memes */}
@@ -47,7 +41,6 @@ const MemeDetails = (props) => {
                                                 <Form.Control as="textarea" readOnly className="meme-text-area"
                                                     value={sentences[index]}
                                                     style={{
-                                                        // top: "10%", left: "14%", fontFamily: "ui-rounded", fontSize: "150%", color: "white"
                                                         top: (textArea.top) + "px",
                                                         left: (textArea.left) + "px",
                                                         width: (textArea.width) + "px",

@@ -1,18 +1,19 @@
 // React imports
 import { useState } from 'react';
+import isStrongPassword from 'validator/lib/isStrongPassword';
 
 // React bootstrap imports
 import { Form, Button } from 'react-bootstrap';
 
-import isStrongPassword from 'validator/lib/isStrongPassword';
 
 function LoginForm(props) {
+    // values already set only for your convenience, to be substituted with '' in production
     const [username, setUsername] = useState('b3xul');
     const [password, setPassword] = useState('This is my s3cur3 pwd!1!%');
-    // const [show, setShow] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        event.stopPropagation();
         props.setMessage('');
         const credentials = { username, password };
 
@@ -22,11 +23,10 @@ function LoginForm(props) {
         }
         else {
             props.logIn(credentials)
-                .catch((err) => { //console.log("fallito");
+                .catch((err) => {
                     props.setMessage(err.error);
                 });
         }
-
     };
 
     return (

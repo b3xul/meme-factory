@@ -1,16 +1,16 @@
+// React imports
+import { Link } from 'react-router-dom';
+
+// React-Bootstrap imports
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 import Form from 'react-bootstrap/Form';
 import { PeopleFill, LockFill } from 'react-bootstrap-icons';
 
-import { Link } from 'react-router-dom';
-
+// Custom Components imports
 import CopyAndDeleteButtons from './CopyAndDeleteButtons';
 
-// import { useState } from 'react';
-
 const MemeCard = (props) => {
-    // const [highlightedCard, setHighlightedCard] = useState(false);
 
     //imageId not needed
     const { memeId, creatorId, creatorUsername, title, isProtected, fontFamily, fontSize, color, sentences } = props.meme || {};
@@ -18,13 +18,8 @@ const MemeCard = (props) => {
 
     return (
         <Card border={isProtected ? "warning" : "success"} className="meme-card" >
-            <Link className="clickable-section" to={{
-                pathname: "/meme/" + memeId
-                // ,state: { meme: props.meme }
-            }}>
-                {/*onMouseOver={setHighlightCard(memeId)} bg={highlightCard ? "primary" : ""} */}
+            <Link className="clickable-section" to={`/meme/${memeId}`}>
                 <Card.Title>{title}</Card.Title>
-                {/* <Card.Img src={process.env.PUBLIC_URL + props.backgroundImage?.path} /> */}
                 <Card.Body className="no-padding-top">
                     <div className="meme-container">
                         <Image className="meme-image-card" src={process.env.PUBLIC_URL + props.backgroundImage?.path} />
@@ -36,7 +31,6 @@ const MemeCard = (props) => {
                                             <Form.Control as="textarea" readOnly className="meme-text-area"
                                                 value={sentences[index]}
                                                 style={{
-                                                    // top: "10%", left: "14%", fontFamily: "ui-rounded", fontSize: "150%", color: "white"
                                                     top: (textArea.top / 2) + "px",
                                                     left: (textArea.left / 2) + "px",
                                                     width: (textArea.width / 2) + "px",
@@ -65,13 +59,12 @@ const MemeCard = (props) => {
                     </Card.Text>
                 </Card.Body>
             </Link>
-            {
-                props.loggedIn ?
-                    <Card.Body>
-                        <CopyAndDeleteButtons backgroundImage={props.backgroundImage} meme={props.meme} originalCreator={originalCreator} loggedCreator={props.creator} setMessage={props.setMessage} setMemeIdToDelete={props.setMemeIdToDelete} />
-                    </Card.Body>
-                    :
-                    <></>
+            {props.loggedIn ?
+                <Card.Body>
+                    <CopyAndDeleteButtons backgroundImage={props.backgroundImage} meme={props.meme} originalCreator={originalCreator} loggedCreator={props.creator} setMessage={props.setMessage} setMemeIdToDelete={props.setMemeIdToDelete} />
+                </Card.Body>
+                :
+                <></>
             }
         </Card >
     );

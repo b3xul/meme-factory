@@ -11,10 +11,14 @@ const creatorDAO = require("./creatorDAO"); // module for accessing the creators
 const backgroundImageDAO = require("./backgroundImageDAO"); // module for accessing the background images structures in the DB
 const memeDAO = require("./memeDAO"); // module for accessing the memes in the DB
 
+// Arrays of allowed values
 const FONTS = ["Anton", "Comic Neue", "Tangerine", "Arial", "Helvetica", "Verdana", "sans-serif", "Courier New", "monospace", "Georgia", "Times New Roman", "serif"];
 const SIZES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
 const COLORS = ["black", "white", "red", "green", "blue", "yellow", "brown"];
 
+/* -------------------------------------------------------------------------- */
+/*                               Error handling helpers                       */
+/* -------------------------------------------------------------------------- */
 const errorObject = {
   "badCredentials": { "error": "Wrong username or password" },
   "dbError": { "error": "There was a problem with our database. Please try again." },
@@ -86,7 +90,7 @@ const isLoggedIn = (req, res, next) => {
 // set up the session
 app.use(session({
   // by default, Passport uses a MemoryStore to keep track of the sessions
-  secret: "- lorem ipsum dolor sit amet -",
+  secret: "secret meme Pwd m4t3!",
   resave: false,
   saveUninitialized: false
 }));
@@ -96,7 +100,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 /* -------------------------------------------------------------------------- */
-/*                                  creator APIs                                 */
+/*                                  creator APIs                              */
 /* -------------------------------------------------------------------------- */
 // Login --> POST /sessions
 app.post("/api/sessions", function (req, res, next) {
@@ -104,7 +108,7 @@ app.post("/api/sessions", function (req, res, next) {
 
     if (err) // db error in verification callback
     {
-      return next(errorObject["dbError"]); //TO-DO check if err or my dbError
+      return next(errorObject["dbError"]);
     }
     if (!user) { // authn failed
       // display wrong login messages
@@ -147,10 +151,10 @@ app.get('/api/backgroundImages',
   (req, res) => {
     // get backgroundImages that match optional filter in the query
     backgroundImageDAO.listBackgroundImages()
-      .then(backgroundImages => { //console.log('ok');
+      .then(backgroundImages => {
         res.json(backgroundImages);
       })
-      .catch((err) => { //console.log(err);
+      .catch((err) => {
         res.status(500).end();
       });
   });
@@ -164,7 +168,6 @@ app.get('/api/backgroundImages',
 app.get('/api/memes',
   isLoggedIn,
   (req, res) => {
-    //console.log('all memes');
     memeDAO.listMemes()
       .then(memes => res.json(memes))
       .catch(() => res.status(500).end());
@@ -173,7 +176,6 @@ app.get('/api/memes',
 // GET /api/memes/public
 app.get('/api/memes/public',
   (req, res) => {
-    // get memes that match optional filter in the query
     memeDAO.listPublicMemes()
       .then(memes => res.json(memes))
       .catch(() => res.status(500).end());
@@ -199,34 +201,20 @@ app.post('/api/memes',
     check('sentences[1]').isLength({ min: 0, max: 300 }),
     check('sentences[2]').isLength({ min: 0, max: 300 }),
     check('originalCreatorId').custom((value, { req, loc, path }) => {
-      //console.log(value);
-      //console.log(req.body.originalCreatorId);
-      //console.log(req.body.originalIsProtected);
-      console.log(req.body);
-      // if (value !== req.user.creatorId) {
-      //   //if request passes this check I can use req.body.creatorId to insert into the db
-      //   throw new Error("You can only create memes from the logged creator");
-      // }
       if (value !== req.user.creatorId && req.body.originalIsProtected && !req.body.isProtected) {
         throw new Error("A copy of a protected meme from another creator can't be made public!");
       } else {
         return value;
       }
     })
-
-    // check(['important', 'private', 'completed']).isBoolean(),
-    // check('deadline').isISO8601({ strict: true }).optional({ checkFalsy: true })
   ],
   async (req, res) => {
-    //console.log(req.body);
     const errors = validationResult(req).formatWith(errorFormatter); // format error message
-    //console.log(errors);
     if (!errors.isEmpty()) {
       return res.status(422).json({ error: errors.array().join(", ") }); // error message is a single string with all error joined together
     }
 
     const { originalCreatorId, originalIsProtected, ...meme } = req.body;
-    //console.log(meme);
 
     try {
       const result = await memeDAO.createMeme(meme, req.user.creatorId);
@@ -242,13 +230,10 @@ app.delete('/api/memes/:memeId',
   [check('memeId').isInt([{ min: 1 }])],
   async (req, res) => {
     const errors = validationResult(req).formatWith(errorFormatter); // format error message
-    //console.log(errors);
     if (!errors.isEmpty()) {
       return res.status(422).json({ error: errors.array().join(", ") }); // error message is a single string with all error joined together
     }
     try {
-      console.log(req.user);
-      console.log(req.params.memeId);
       const result = await memeDAO.deleteMeme(req.params.memeId, req.user.creatorId);
       if (result === null)
         res.status(200).json({});
@@ -264,5 +249,5 @@ app.delete('/api/memes/:memeId',
 /*                             activate the server                            */
 /* -------------------------------------------------------------------------- */
 app.listen(PORT, () => {
-  //console.log(`Server listening at http://localhost:${PORT}`);
+  console.log(`Server listening at http://localhost:${PORT}`);
 });

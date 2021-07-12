@@ -36,7 +36,6 @@ exports.getCreatorById = (creatorId) => {
             else if (row === undefined) // username does not exist;
                 resolve(false);
             else {
-                // by default, the local strategy looks for "username": not to create confusion in server.js, we can create an object with that property
                 const creator = { creatorId: row.creatorId, username: row.username, email: row.email };
                 resolve(creator);
             }

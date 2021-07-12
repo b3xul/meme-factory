@@ -25,7 +25,6 @@ const CopyAndDeleteButtons = (props) => {
                     <></>
                 }
             </Col>
-            {/* ADD MODAL */}
         </Row>
     );
 };

@@ -44,31 +44,7 @@ exports.listPublicMemes = (user, filter) => {
     });
 };
 
-// // get the course identified by {code}
-// exports.getMeme = (memeId) => {
-//     return new Promise((resolve, reject) => {
-//         const sql =
-//             `SELECT memeId, imageId, Meme.creatorId, username as creatorUsername, title, isProtected, fontFamily, fontSize, color, sentence1, sentence2, sentence3
-//             FROM Meme, Creator
-//             WHERE Meme.creatorId=Creator.creatorId and memeId=?;`;
-//         db.get(sql, [memeId], (err, row) => {
-//             if (err) {
-//                 reject(err);
-//                 return;
-//             }
-//             if (row == undefined) {
-//                 resolve({ error: 'Meme not found.' });
-//             } else {
-//                 const meme = { ...row };
-//                 resolve(meme);
-//             }
-//         });
-//     });
-// };
-
-
 // add a new meme
-// the meme id is added automatically by the DB, and it is returned as result
 exports.createMeme = (meme, creatorId) => {
     return new Promise((resolve, reject) => {
         const sql = 'INSERT INTO Meme (imageId, creatorId, title, isProtected, fontFamily, fontSize, color, sentence1, sentence2, sentence3) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
@@ -77,7 +53,7 @@ exports.createMeme = (meme, creatorId) => {
                 reject(err);
                 return;
             }
-            resolve({ ...meme, memeId: this.lastID });
+            resolve({ ...meme, memeId: this.lastID }); // the memeId is computed automatically by the DB
         });
     });
 };
@@ -92,7 +68,6 @@ exports.deleteMeme = (memeId, creatorId) => {
                 reject(err);
                 return;
             }
-            console.log(this.changes);
             if (this.changes === 0) {
                 resolve({ error: 'Couldn\'t delete meme: not found.' });
             }
