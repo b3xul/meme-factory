@@ -245,3 +245,6 @@ DELETE http://localhost:3001/api/memes/24
 
 ### Not present
 DELETE http://localhost:3001/api/memes/99
+
+### Not mine
+DELETE http://localhost:3001/api/memes/4

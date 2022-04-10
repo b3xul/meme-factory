@@ -22,7 +22,7 @@ const COLORS = ["black", "white", "red", "green", "blue", "yellow", "brown"];
 const errorObject = {
   "badCredentials": { "error": "Wrong username or password" },
   "dbError": { "error": "There was a problem with our database. Please try again." },
-  "notAuthenticated": { "error": "Only authenticated users can see create, copy, delete and see protected memes!" }
+  "notAuthenticated": { "error": "Only authenticated users can create, copy, delete and see protected memes!" }
 };
 
 const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
@@ -215,7 +215,6 @@ app.post('/api/memes',
     }
 
     const { originalCreatorId, originalIsProtected, ...meme } = req.body;
-
     try {
       const result = await memeDAO.createMeme(meme, req.user.creatorId);
       res.json(result);

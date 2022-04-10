@@ -11,10 +11,11 @@ import { LoginForm, LogoutButton } from "./Login";
 const Navigation = (props) => {
     return (
         <Navbar bg="primary" variant="dark" expand="sm" fixed="top">
-            <Navbar.Brand href="/" aria-label="meme-factory logo and name">
-                <FileRichtext className="mr-1" size="32" /> meme-factory
-            </Navbar.Brand>
-
+            <Link to="/">
+                <Navbar.Brand aria-label="meme-factory logo and name">
+                    <FileRichtext className="mr-1" size="32" /> meme-factory
+                </Navbar.Brand>
+            </Link>
             {props.checkingAuth ?
                 <Navbar.Brand className="ml-sm-auto">
                     checking authentication...🐻
